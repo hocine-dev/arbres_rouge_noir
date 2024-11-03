@@ -1,7 +1,7 @@
 public interface Collection<T> {
-    void add(T value);
-    boolean contains(T value);
-    void remove(T value);
-    int size();
-    boolean isEmpty();
+    void ajouter(T valeur);
+    boolean contient(T valeur);
+    void supprimer(T valeur);
+    int taille();
+    boolean estVide();
 }
