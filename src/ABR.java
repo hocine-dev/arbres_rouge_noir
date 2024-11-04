@@ -1,11 +1,13 @@
-public class ABR<T extends Comparable<T>> implements Collection<T> {
-    // Classe interne représentant un nœud de l'arbre
-    private class Noeud {
-        T valeur;     // Valeur stockée dans le nœud
-        Noeud gauche; // Référence au sous-arbre gauche
-        Noeud droit;  // Référence au sous-arbre droit
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 
-        // Constructeur pour initialiser un nouveau nœud
+public class ABR<T extends Comparable<T>> implements Collection<T> {
+    private class Noeud {
+        T valeur;
+        Noeud gauche;
+        Noeud droit;
+
         Noeud(T valeur) {
             this.valeur = valeur;
             this.gauche = null;
@@ -13,115 +15,240 @@ public class ABR<T extends Comparable<T>> implements Collection<T> {
         }
     }
 
-    private Noeud racine; // Référence au nœud racine de l'arbre
-    private int taille;   // Nombre d'éléments dans l'arbre
+    private Noeud racine;
+    private int taille;
 
-    // Constructeur pour initialiser un arbre vide
     public ABR() {
-        this.racine = null; // La racine est nulle pour un arbre vide
-        this.taille = 0;    // Taille initiale est 0
+        this.racine = null;
+        this.taille = 0;
     }
 
     @Override
-    public void ajouter(T valeur) {
-        // Si la valeur n'est pas déjà présente, nous l'ajoutons
-        if (!contient(valeur)) {
-            racine = ajouterRec(racine, valeur); // Appel à la méthode récursive d'ajout
-            taille++; // Incrémente la taille uniquement si un nouvel élément est ajouté
+    public boolean add(T valeur) {
+        if (!contains(valeur)) {
+            racine = ajouterRec(racine, valeur);
+            taille++;
+            return true;
         }
+        return false;
     }
 
-    // Méthode récursive pour ajouter une valeur dans l'arbre
     private Noeud ajouterRec(Noeud noeud, T valeur) {
         if (noeud == null) {
-            return new Noeud(valeur); // Crée un nouveau nœud si nous atteignons une position vide
+            return new Noeud(valeur);
         }
-        // Comparer les valeurs pour déterminer où ajouter le nouveau nœud
         if (valeur.compareTo(noeud.valeur) < 0) {
-            noeud.gauche = ajouterRec(noeud.gauche, valeur); // Ajoute à gauche
+            noeud.gauche = ajouterRec(noeud.gauche, valeur);
         } else {
-            noeud.droit = ajouterRec(noeud.droit, valeur); // Ajoute à droite
+            noeud.droit = ajouterRec(noeud.droit, valeur);
         }
-        return noeud; // Retourne le nœud (inchangé) en cas de non ajout
+        return noeud;
     }
 
     @Override
-    public boolean contient(T valeur) {
-        return contientRec(racine, valeur); // Appel à la méthode récursive pour vérifier la présence de la valeur
+    public boolean contains(Object o) {
+        try {
+            @SuppressWarnings("unchecked")
+            T valeur = (T) o;
+            return contientRec(racine, valeur);
+        } catch (ClassCastException e) {
+            return false;
+        }
     }
 
-    // Méthode récursive pour tester si une valeur est dans l'arbre
     private boolean contientRec(Noeud noeud, T valeur) {
         if (noeud == null) {
-            return false; // Si le nœud est nul, la valeur n'est pas présente
+            return false;
         }
         if (valeur.equals(noeud.valeur)) {
-            return true; // La valeur a été trouvée
+            return true;
         }
-        // Vérifier dans le sous-arbre gauche ou droit selon la comparaison
         return valeur.compareTo(noeud.valeur) < 0
             ? contientRec(noeud.gauche, valeur)
             : contientRec(noeud.droit, valeur);
     }
 
     @Override
-    public void supprimer(T valeur) {
-        racine = supprimerRec(racine, valeur); // Appel à la méthode récursive pour supprimer
+    public boolean remove(Object o) {
+        try {
+            @SuppressWarnings("unchecked")
+            T valeur = (T) o;
+            if (contains(valeur)) {
+                racine = supprimerRec(racine, valeur);
+                taille--;
+                return true;
+            }
+            return false;
+        } catch (ClassCastException e) {
+            return false;
+        }
     }
 
-    // Méthode récursive pour supprimer un nœud dans l'arbre
     private Noeud supprimerRec(Noeud noeud, T valeur) {
         if (noeud == null) {
-            return null; // Rien à supprimer
+            return null;
         }
 
-        // Comparer les valeurs pour trouver le nœud à supprimer
         if (valeur.compareTo(noeud.valeur) < 0) {
-            noeud.gauche = supprimerRec(noeud.gauche, valeur); // Recherche à gauche
+            noeud.gauche = supprimerRec(noeud.gauche, valeur);
         } else if (valeur.compareTo(noeud.valeur) > 0) {
-            noeud.droit = supprimerRec(noeud.droit, valeur); // Recherche à droite
+            noeud.droit = supprimerRec(noeud.droit, valeur);
         } else {
-            // Noeud à supprimer trouvé
-            // Cas 1 : Noeud sans enfant
             if (noeud.gauche == null && noeud.droit == null) {
-                taille--; // Décrémenter ici
-                return null; // Supprimer le nœud
+                return null;
             }
-
-            // Cas 2 : Noeud avec un enfant
             if (noeud.gauche == null) {
-                taille--; // Décrémenter ici
-                return noeud.droit; // Remplacer par le sous-arbre droit
+                return noeud.droit;
             } else if (noeud.droit == null) {
-                taille--; // Décrémenter ici
-                return noeud.gauche; // Remplacer par le sous-arbre gauche
+                return noeud.gauche;
             }
-
-            // Cas 3 : Noeud avec deux enfants
-            Noeud successeur = min(noeud.droit); // Trouver le successeur
-            noeud.valeur = successeur.valeur; // Remplacer la valeur par celle du successeur
-            noeud.droit = supprimerRec(noeud.droit, successeur.valeur); // Supprimer le successeur
-            // Ne décrémentez pas la taille ici, car la taille a déjà été décrémentée
+            Noeud successeur = min(noeud.droit);
+            noeud.valeur = successeur.valeur;
+            noeud.droit = supprimerRec(noeud.droit, successeur.valeur);
         }
-
-        return noeud; // Retourner le nœud mis à jour
+        return noeud;
     }
 
-    // Méthode pour trouver le nœud avec la valeur minimale dans un sous-arbre
     private Noeud min(Noeud noeud) {
         if (noeud.gauche == null) {
-            return noeud; // Le nœud actuel est le minimum
+            return noeud;
         }
-        return min(noeud.gauche); // Continuer à gauche
+        return min(noeud.gauche);
     }
 
     @Override
-    public int taille() {
-        return taille; // Retourner la taille actuelle de l'arbre
+    public int size() {
+        return taille;
     }
 
     @Override
-    public boolean estVide() {
-        return taille == 0; // Vérifier si l'arbre est vide
+    public boolean isEmpty() {
+        return taille == 0;
+    }
+
+    @Override
+    public void clear() {
+        racine = null;
+        taille = 0;
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        return new ABRIterator();
+    }
+
+    private class ABRIterator implements Iterator<T> {
+        private Noeud current;
+        private Noeud next;
+
+        public ABRIterator() {
+            next = racine;
+            if (next != null) {
+                while (next.gauche != null) {
+                    next = next.gauche;
+                }
+            }
+        }
+
+        @Override
+        public boolean hasNext() {
+            return next != null;
+        }
+
+        @Override
+        public T next() {
+            if (!hasNext()) {
+                throw new NoSuchElementException();
+            }
+            current = next;
+
+            // Traverser l'arbre pour trouver le prochain nœud en ordre croissant
+            if (next.droit != null) {
+                next = next.droit;
+                while (next.gauche != null) {
+                    next = next.gauche;
+                }
+            } else {
+                Noeud parent = racine;
+                Noeud child = next;
+                while (parent != null && child == parent.droit) {
+                    child = parent;
+                    parent = parent.gauche;
+                }
+                next = parent;
+            }
+            return current.valeur;
+        }
+    }
+
+    @Override
+    public Object[] toArray() {
+        Object[] array = new Object[taille];
+        int i = 0;
+        for (T t : this) {
+            array[i++] = t;
+        }
+        return array;
+    }
+
+    @Override
+    public <E> E[] toArray(E[] a) {
+        if (a.length < taille) {
+            a = (E[]) java.lang.reflect.Array.newInstance(a.getClass().getComponentType(), taille);
+        }
+        int i = 0;
+        for (T t : this) {
+            a[i++] = (E) t;
+        }
+        if (a.length > taille) {
+            a[taille] = null;
+        }
+        return a;
+    }
+
+    @Override
+    public boolean containsAll(Collection<?> c) {
+        for (Object e : c) {
+            if (!contains(e)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public boolean addAll(Collection<? extends T> c) {
+        boolean modified = false;
+        for (T e : c) {
+            if (add(e)) {
+                modified = true;
+            }
+        }
+        return modified;
+    }
+
+    @Override
+    public boolean removeAll(Collection<?> c) {
+        boolean modified = false;
+        for (Object e : c) {
+            if (remove(e)) {
+                modified = true;
+            }
+        }
+        return modified;
+    }
+
+    @Override
+    public boolean retainAll(Collection<?> c) {
+        boolean modified = false;
+        Iterator<T> it = iterator();
+        while (it.hasNext()) {
+            T elem = it.next();
+            if (!c.contains(elem)) {
+                it.remove();
+                modified = true;
+            }
+        }
+        return modified;
     }
 }
