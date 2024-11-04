@@ -5,6 +5,8 @@ public class Main {
         abr.add(10);
         abr.add(12);
         abr.add(14);
+        abr.add(14);
+        abr.add(0);
         
         
         // Instanciation de l'ARN
@@ -12,6 +14,8 @@ public class Main {
         arn.add(10);
         arn.add(9);
         arn.add(120);
+        arn.add(120);
+        arn.add(9);
         
        
     }
