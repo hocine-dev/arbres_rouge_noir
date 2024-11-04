@@ -3,11 +3,15 @@ public class Main {
         // Instanciation de l'ABR
         ABR<Integer> abr = new ABR<>();
         abr.add(10);
+        abr.add(12);
+        abr.add(14);
         
         
         // Instanciation de l'ARN
         ARN<Integer> arn = new ARN<>();
         arn.add(10);
+        arn.add(9);
+        arn.add(120);
         
        
     }
