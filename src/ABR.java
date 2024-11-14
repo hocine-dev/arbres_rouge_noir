@@ -1,5 +1,7 @@
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 /**
@@ -268,11 +270,18 @@ public class ABR<T extends Comparable<T>> implements Collection<T> {
             } else {
                 Noeud parent = racine;
                 Noeud child = next;
-                while (parent != null && child == parent.droit) {
-                    child = parent;
-                    parent = parent.gauche;
+                Noeud ancestor = null;
+                while (parent != null) {
+                    if (child.valeur.compareTo(parent.valeur) < 0) {
+                        ancestor = parent;
+                        parent = parent.gauche;
+                    } else if (child.valeur.compareTo(parent.valeur) > 0) {
+                        parent = parent.droit;
+                    } else {
+                        break;
+                    }
                 }
-                next = parent;
+                next = ancestor;
             }
             return current.valeur;
         }
@@ -284,14 +293,16 @@ public class ABR<T extends Comparable<T>> implements Collection<T> {
      * @return Un tableau contenant tous les éléments de l'arbre.
      */
     @Override
-    public Object[] toArray() {
-        Object[] array = new Object[taille];
-        int i = 0;
-        for (T t : this) {
-            array[i++] = t;
-        }
-        return array;
+  public T[] toArray() {
+    List<T> elements = new ArrayList<>();
+    for (T t : this) {
+        elements.add(t);
     }
+    @SuppressWarnings("unchecked")
+    T[] array = (T[]) new Comparable[elements.size()];
+    return elements.toArray(array); // Convertit la liste en tableau de type T[]
+}
+
 
     /**
      * Remplit un tableau donné avec les éléments de l'arbre.
