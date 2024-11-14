@@ -2,12 +2,26 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+/**
+ * Classe ABR (Arbre Binaire de Recherche) générique qui implémente l'interface Collection.
+ * 
+ * @param <T> Le type des éléments stockés dans l'arbre, qui doit être comparable.
+ */
 public class ABR<T extends Comparable<T>> implements Collection<T> {
+
+    /**
+     * Classe interne représentant un nœud de l'arbre.
+     */
     private class Noeud {
         T valeur;
         Noeud gauche;
         Noeud droit;
 
+        /**
+         * Constructeur pour créer un nouveau nœud avec une valeur donnée.
+         * 
+         * @param valeur La valeur du nœud.
+         */
         Noeud(T valeur) {
             this.valeur = valeur;
             this.gauche = null;
@@ -18,11 +32,20 @@ public class ABR<T extends Comparable<T>> implements Collection<T> {
     private Noeud racine;
     private int taille;
 
+    /**
+     * Constructeur pour créer un arbre binaire de recherche vide.
+     */
     public ABR() {
         this.racine = null;
         this.taille = 0;
     }
 
+    /**
+     * Ajoute une valeur à l'arbre s'il n'est pas déjà présent.
+     * 
+     * @param valeur La valeur à ajouter.
+     * @return true si la valeur a été ajoutée, false si elle était déjà présente.
+     */
     @Override
     public boolean add(T valeur) {
         if (!contains(valeur)) {
@@ -33,6 +56,13 @@ public class ABR<T extends Comparable<T>> implements Collection<T> {
         return false;
     }
 
+    /**
+     * Méthode récursive pour ajouter une valeur à l'arbre.
+     * 
+     * @param noeud Le nœud courant.
+     * @param valeur La valeur à ajouter.
+     * @return Le nœud mis à jour.
+     */
     private Noeud ajouterRec(Noeud noeud, T valeur) {
         if (noeud == null) {
             return new Noeud(valeur);
@@ -45,6 +75,12 @@ public class ABR<T extends Comparable<T>> implements Collection<T> {
         return noeud;
     }
 
+    /**
+     * Vérifie si une valeur est présente dans l'arbre.
+     * 
+     * @param o L'objet à vérifier.
+     * @return true si l'objet est présent, false sinon.
+     */
     @Override
     public boolean contains(Object o) {
         try {
@@ -56,6 +92,13 @@ public class ABR<T extends Comparable<T>> implements Collection<T> {
         }
     }
 
+    /**
+     * Méthode récursive pour vérifier si une valeur est présente dans l'arbre.
+     * 
+     * @param noeud Le nœud courant.
+     * @param valeur La valeur à vérifier.
+     * @return true si la valeur est présente, false sinon.
+     */
     private boolean contientRec(Noeud noeud, T valeur) {
         if (noeud == null) {
             return false;
@@ -68,6 +111,12 @@ public class ABR<T extends Comparable<T>> implements Collection<T> {
             : contientRec(noeud.droit, valeur);
     }
 
+    /**
+     * Supprime une valeur de l'arbre si elle est présente.
+     * 
+     * @param o L'objet à supprimer.
+     * @return true si l'objet a été supprimé, false sinon.
+     */
     @Override
     public boolean remove(Object o) {
         try {
@@ -84,6 +133,13 @@ public class ABR<T extends Comparable<T>> implements Collection<T> {
         }
     }
 
+    /**
+     * Méthode récursive pour supprimer une valeur de l'arbre.
+     * 
+     * @param noeud Le nœud courant.
+     * @param valeur La valeur à supprimer.
+     * @return Le nœud mis à jour.
+     */
     private Noeud supprimerRec(Noeud noeud, T valeur) {
         if (noeud == null) {
             return null;
@@ -109,6 +165,12 @@ public class ABR<T extends Comparable<T>> implements Collection<T> {
         return noeud;
     }
 
+    /**
+     * Trouve le nœud avec la valeur minimale dans un sous-arbre.
+     * 
+     * @param noeud Le nœud courant.
+     * @return Le nœud avec la valeur minimale.
+     */
     private Noeud min(Noeud noeud) {
         if (noeud.gauche == null) {
             return noeud;
@@ -116,31 +178,55 @@ public class ABR<T extends Comparable<T>> implements Collection<T> {
         return min(noeud.gauche);
     }
 
+    /**
+     * Retourne la taille de l'arbre.
+     * 
+     * @return Le nombre d'éléments dans l'arbre.
+     */
     @Override
     public int size() {
         return taille;
     }
 
+    /**
+     * Vérifie si l'arbre est vide.
+     * 
+     * @return true si l'arbre est vide, false sinon.
+     */
     @Override
     public boolean isEmpty() {
         return taille == 0;
     }
 
+    /**
+     * Vide l'arbre.
+     */
     @Override
     public void clear() {
         racine = null;
         taille = 0;
     }
 
+    /**
+     * Retourne un itérateur pour parcourir l'arbre.
+     * 
+     * @return Un itérateur pour parcourir l'arbre.
+     */
     @Override
     public Iterator<T> iterator() {
         return new ABRIterator();
     }
 
+    /**
+     * Classe interne pour l'itération sur l'arbre.
+     */
     private class ABRIterator implements Iterator<T> {
         private Noeud current;
         private Noeud next;
 
+        /**
+         * Constructeur pour initialiser l'itérateur.
+         */
         public ABRIterator() {
             next = racine;
             if (next != null) {
@@ -150,11 +236,22 @@ public class ABR<T extends Comparable<T>> implements Collection<T> {
             }
         }
 
+        /**
+         * Vérifie s'il y a un élément suivant dans l'itération.
+         * 
+         * @return true s'il y a un élément suivant, false sinon.
+         */
         @Override
         public boolean hasNext() {
             return next != null;
         }
 
+        /**
+         * Retourne l'élément suivant dans l'itération.
+         * 
+         * @return L'élément suivant.
+         * @throws NoSuchElementException Si aucun élément suivant n'est présent.
+         */
         @Override
         public T next() {
             if (!hasNext()) {
@@ -181,6 +278,11 @@ public class ABR<T extends Comparable<T>> implements Collection<T> {
         }
     }
 
+    /**
+     * Retourne un tableau contenant tous les éléments de l'arbre.
+     * 
+     * @return Un tableau contenant tous les éléments de l'arbre.
+     */
     @Override
     public Object[] toArray() {
         Object[] array = new Object[taille];
@@ -191,21 +293,31 @@ public class ABR<T extends Comparable<T>> implements Collection<T> {
         return array;
     }
 
+    /**
+     * Remplit un tableau donné avec les éléments de l'arbre.
+     * 
+     * @param <E> Le type des éléments du tableau.
+     * @param a Le tableau à remplir.
+     * @return Le tableau rempli.
+     */
     @Override
     public <E> E[] toArray(E[] a) {
         if (a.length < taille) {
-            a = (E[]) java.lang.reflect.Array.newInstance(a.getClass().getComponentType(), taille);
+            return (E[]) toArray();
         }
-        int i = 0;
-        for (T t : this) {
-            a[i++] = (E) t;
-        }
+        System.arraycopy(toArray(), 0, a, 0, taille);
         if (a.length > taille) {
             a[taille] = null;
         }
         return a;
     }
 
+    /**
+     * Vérifie si l'arbre contient tous les éléments d'une collection donnée.
+     * 
+     * @param c La collection à vérifier.
+     * @return true si l'arbre contient tous les éléments de la collection, false sinon.
+     */
     @Override
     public boolean containsAll(Collection<?> c) {
         for (Object e : c) {
@@ -216,6 +328,12 @@ public class ABR<T extends Comparable<T>> implements Collection<T> {
         return true;
     }
 
+    /**
+     * Ajoute tous les éléments d'une collection donnée à l'arbre.
+     * 
+     * @param c La collection contenant les éléments à ajouter.
+     * @return true si l'arbre a été modifié, false sinon.
+     */
     @Override
     public boolean addAll(Collection<? extends T> c) {
         boolean modified = false;
@@ -227,6 +345,12 @@ public class ABR<T extends Comparable<T>> implements Collection<T> {
         return modified;
     }
 
+    /**
+     * Supprime tous les éléments d'une collection donnée de l'arbre.
+     * 
+     * @param c La collection contenant les éléments à supprimer.
+     * @return true si l'arbre a été modifié, false sinon.
+     */
     @Override
     public boolean removeAll(Collection<?> c) {
         boolean modified = false;
@@ -238,6 +362,12 @@ public class ABR<T extends Comparable<T>> implements Collection<T> {
         return modified;
     }
 
+    /**
+     * Retient uniquement les éléments de l'arbre qui sont contenus dans une collection donnée.
+     * 
+     * @param c La collection contenant les éléments à retenir.
+     * @return true si l'arbre a été modifié, false sinon.
+     */
     @Override
     public boolean retainAll(Collection<?> c) {
         boolean modified = false;
