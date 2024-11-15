@@ -238,6 +238,15 @@ public class ABR<T extends Comparable<T>> implements Collection<T> {
             }
         }
 
+        @Override
+        public void remove() {
+            if (current == null) {
+                throw new IllegalStateException();
+            }
+            ABR.this.remove(current.valeur);
+            current = null;
+        }
+
         /**
          * Vérifie s'il y a un élément suivant dans l'itération.
          * 
@@ -313,12 +322,18 @@ public class ABR<T extends Comparable<T>> implements Collection<T> {
      */
     @Override
     public <E> E[] toArray(E[] a) {
-        if (a.length < taille) {
-            return (E[]) toArray();
+        List<T> elements = new ArrayList<>();
+        for (T t : this) {
+            elements.add(t);
         }
-        System.arraycopy(toArray(), 0, a, 0, taille);
-        if (a.length > taille) {
-            a[taille] = null;
+        if (a.length < elements.size()) {
+            @SuppressWarnings("unchecked")
+            E[] newArray = (E[]) java.lang.reflect.Array.newInstance(a.getClass().getComponentType(), elements.size());
+            return elements.toArray(newArray);
+        }
+        System.arraycopy(elements.toArray(), 0, a, 0, elements.size());
+        if (a.length > elements.size()) {
+            a[elements.size()] = null;
         }
         return a;
     }
