@@ -107,7 +107,9 @@ public class ARN<E extends Comparable<E>> implements Collection<E> {
                         }
                         supprimerNoeud(dernierRetourné);
                         dernierRetourné = null;
+                        taille--;
                         compteurModificationAttendu = taille;
+                        
                     }
         
                     private Noeud successeur(Noeud noeud) {
