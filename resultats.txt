@@ -1,0 +1,18 @@
+Exécution du test avec 1000000 valeurs
+Temps d'ajout pour ARN (ordre aléatoire) : 0.072682 s
+Temps d'ajout pour ABR (ordre aléatoire) : 0.0737074 s
+Temps d'ajout pour ARN (ordre croissant) : 0.0411678 s
+Temps d'ajout pour ABR (ordre croissant) : 0.1759482 s
+
+Exécution du test avec 10000000 valeurs
+Temps d'ajout pour ARN (ordre aléatoire) : 0.5820017 s
+Temps d'ajout pour ABR (ordre aléatoire) : 0.5282634 s
+Temps d'ajout pour ARN (ordre croissant) : 0.2436575 s
+Temps d'ajout pour ABR (ordre croissant) : 1.5938908 s
+
+Exécution du test avec 100000000 valeurs
+Temps d'ajout pour ARN (ordre aléatoire) : 7.5248194 s
+Temps d'ajout pour ABR (ordre aléatoire) : 5.8440648 s
+Temps d'ajout pour ARN (ordre croissant) : 1.9158186 s
+Temps d'ajout pour ABR (ordre croissant) : 15.5506563 s
+
