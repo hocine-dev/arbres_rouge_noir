@@ -16,25 +16,28 @@ public class ARNTest {
 
     @Test
     public void testAdd() {
+        // Teste l'ajout d'éléments
         assertTrue(arn.add(10));
         assertTrue(arn.add(20));
         assertTrue(arn.add(5));
-        assertFalse(arn.add(10)); // Duplicate element
+        assertFalse(arn.add(10)); // Élément dupliqué
         assertEquals(3, arn.size());
     }
 
     @Test
     public void testRemove() {
+        // Teste la suppression d'éléments
         arn.add(10);
         arn.add(20);
         arn.add(5);
         assertTrue(arn.remove(10));
-        assertFalse(arn.remove(10)); // Element already removed
+        assertFalse(arn.remove(10)); // Élément déjà supprimé
         assertEquals(2, arn.size());
     }
 
     @Test
     public void testContains() {
+        // Teste la présence d'éléments
         arn.add(10);
         arn.add(20);
         arn.add(5);
@@ -44,6 +47,7 @@ public class ARNTest {
 
     @Test
     public void testIsEmpty() {
+        // Teste si l'arbre est vide
         assertTrue(arn.isEmpty());
         arn.add(10);
         assertFalse(arn.isEmpty());
@@ -51,6 +55,7 @@ public class ARNTest {
 
     @Test
     public void testSize() {
+        // Teste la taille de l'arbre
         assertEquals(0, arn.size());
         arn.add(10);
         arn.add(20);
@@ -59,6 +64,7 @@ public class ARNTest {
 
     @Test
     public void testClear() {
+        // Teste la suppression de tous les éléments
         arn.add(10);
         arn.add(20);
         arn.clear();
@@ -68,6 +74,7 @@ public class ARNTest {
 
     @Test
     public void testIterator() {
+        // Teste l'itérateur
         arn.add(10);
         arn.add(20);
         arn.add(5);
@@ -81,6 +88,7 @@ public class ARNTest {
 
     @Test
     public void testToArray() {
+        // Teste la conversion en tableau
         arn.add(10);
         arn.add(20);
         arn.add(5);
@@ -90,6 +98,7 @@ public class ARNTest {
 
     @Test
     public void testToArrayWithType() {
+        // Teste la conversion en tableau avec type
         arn.add(10);
         arn.add(20);
         arn.add(5);
@@ -99,12 +108,14 @@ public class ARNTest {
 
     @Test
     public void testAddAll() {
+        // Teste l'ajout de tous les éléments d'une collection
         assertTrue(arn.addAll(Arrays.asList(10, 20, 5)));
         assertEquals(3, arn.size());
     }
 
     @Test
     public void testRemoveAll() {
+        // Teste la suppression de tous les éléments d'une collection
         arn.add(10);
         arn.add(20);
         arn.add(5);
@@ -114,6 +125,7 @@ public class ARNTest {
 
     @Test
     public void testContainsAll() {
+        // Teste la présence de tous les éléments d'une collection
         arn.add(10);
         arn.add(20);
         arn.add(5);
@@ -123,6 +135,7 @@ public class ARNTest {
 
     @Test
     public void testRetainAll() {
+        // Teste la conservation de tous les éléments d'une collection
         arn.add(10);
         arn.add(20);
         arn.add(5);
@@ -132,6 +145,7 @@ public class ARNTest {
 
     @Test
     public void testIteratorRemove() {
+        // Teste la suppression d'éléments via l'itérateur
         arn.add(10);
         arn.add(20);
         arn.add(5);
@@ -147,6 +161,7 @@ public class ARNTest {
 
     @Test
     public void testIteratorConcurrentModification() {
+        // Teste la modification concurrente via l'itérateur
         arn.add(10);
         arn.add(20);
         arn.add(5);
@@ -157,6 +172,7 @@ public class ARNTest {
 
     @Test
     public void testIteratorNoSuchElementException() {
+        // Teste l'exception NoSuchElementException via l'itérateur
         arn.add(10);
         Iterator<Integer> it = arn.iterator();
         it.next();
